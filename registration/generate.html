@@ -1,0 +1,30 @@
+<html>
+<head>
+<script>var clicky_site_ids = clicky_site_ids || []; clicky_site_ids.push(101195272);</script>
+<script async src="//static.getclicky.com/js"></script>
+</head>
+<body>
+
+<script src="https://www.google.com/recaptcha/api.js"></script>
+
+<div class="g-recaptcha"
+     data-sitekey="6Le8cd8dAAAAAAH7zVJbnJ0o6F8Og_bPicPDfhIV"
+     data-callback="onToken"
+     data-size="invisible">
+</div>
+
+<script>
+
+function onToken(token) {
+  window.location = "nkdcaptcha://" + token;
+}
+
+window.onload = function(e) {
+  grecaptcha.execute();
+}
+
+</script>
+
+
+</body>
+</html>
