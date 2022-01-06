@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>NKDuy Captcha</title>
+    <style type="text/css">
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: black;
+        }
+      }
+    </style>
+  </head>
+  <body class="captcha-not-done">
+    <div id="container"></div>
+
+    <script type="text/javascript">
+      function getTheme() {
+        var prefersDark = false;
+        try {
+          prefersDark = window.matchMedia("(prefers-color-scheme: dark)")
+            .matches;
+        } catch (err) {
+          // Errors are dropped, and we assume the user wants a light theme.
+        }
+        return prefersDark ? "dark" : "light";
+      }
+
+      function onload() {
+        var isDone = false;
+
+        var widgetId = grecaptcha.render("container", {
+          sitekey: "6Le8cd8dAAAAAAH7zVJbnJ0o6F8Og_bPicPDfhIV",
+          size: "invisible",
+          theme: getTheme(),
+          callback: function (token) {
+            isDone = true;
+            document.body.removeAttribute("class");
+
+            window.location = "nkdcaptcha://" + token;
+          },
+        });
+
+        function execute() {
+          if (isDone) {
+            return;
+          }
+
+          grecaptcha.execute(widgetId);
+
+          // Below, we immediately reopen if the user clicks outside the widget. If they
+          //   close it some other way (e.g., by pressing Escape), we force-reopen it
+          //   every second.
+          setTimeout(execute, 1000);
+        }
+
+        // If the user clicks outside the widget, reCAPTCHA will open it, but we'll
+        //   immediately reopen it. (We use onclick for maximum browser compatibility.)
+        document.body.onclick = function () {
+          if (!isDone) {
+            grecaptcha.execute(widgetId);
+          }
+        };
+
+        execute();
+      }
+    </script>
+
+    <script
+      src="https://www.google.com/recaptcha/api.js?onload=onload&render=explicit"
+      async
+      defer
+    ></script>
+  </body>
+</html>
